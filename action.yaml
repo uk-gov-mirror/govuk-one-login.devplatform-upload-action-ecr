@@ -147,7 +147,7 @@ runs:
     - name: Install Cosign
       uses: sigstore/cosign-installer@main
       with:
-        cosign-release: "v1.9.0"
+        cosign-release: "v2.5.2"
 
     - name: Sign the image
       if: ${{ inputs.container-sign-kms-key-arn != 'none' }}
