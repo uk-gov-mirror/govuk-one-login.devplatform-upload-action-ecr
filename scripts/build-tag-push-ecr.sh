@@ -89,9 +89,9 @@ if [ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]; then
         "closecircuitbreaker=$CLOSE_CIRCUIT_BREAKER"
     )
 
-    [[ ${VERSION:-} ]] && release_metadata+=(
-        "codepipeline-artifact-revision-summary=$VERSION"
-        "release=$VERSION"
+    [[ ${VERSION_NUMBER:-} ]] && release_metadata+=(
+        "codepipeline-artifact-revision-summary=$VERSION_NUMBER"
+        "release=$VERSION_NUMBER"
     )
 
     metadata=$(IFS="," ; echo "${release_metadata[*]}")
