@@ -8,6 +8,10 @@ inputs:
     description: "The secret with the ARN of the key to sign container images e.g. secrets.CONTAINER_SIGN_KMS_KEY"
     required: false
     default: "none"
+  cosign-version:
+    description: "The version of cosign to use for signing. This defaults to v2.5.1"
+    required: false
+    default: "v2.5.1"
   build-and-push-image-only:
     description: "Only run docker build, push and signing steps. Skip packaging and artifact uploads"
     required: false
@@ -95,10 +99,11 @@ runs:
         username: ${{ inputs.private-docker-login-username }}
         password: ${{ inputs.private-docker-login-password }}
 
+    # Currently pinned to avoid numerous conflicts. See ticket: PSREDEV-3389
     - name: Install Cosign
-      uses: sigstore/cosign-installer@main
+      uses: sigstore/cosign-installer@v3.10.1
       with:
-        cosign-release: "v3.0.3"
+        cosign-release: ${{ inputs.cosign-version }}
 
     - name: Upload Fargates to S3
       env:
