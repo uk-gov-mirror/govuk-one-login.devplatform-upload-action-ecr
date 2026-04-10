@@ -8,10 +8,18 @@ inputs:
     description: "The secret with the ARN of the key to sign container images e.g. secrets.CONTAINER_SIGN_KMS_KEY"
     required: false
     default: "none"
-  cosign-version:
-    description: "The version of cosign to use for signing. This defaults to v2.5.1"
+  tlog-upload:
+    description: "Upload signing record to Rekor transparency log"
     required: false
-    default: "v2.5.1"
+    default: "true"
+  cosign-version:
+    description: "The version of cosign to use for signing. This defaults to v3.0.5 which is currently the latest stable release"
+    required: false
+    default: "v3.0.5"
+  cosign-installer:
+    description: "The version of the cosign installer action to use. This defaults to v4.1.1, which is currently the latest stable release"
+    required: false
+    default: "v4.1.1"
   build-and-push-image-only:
     description: "Only run docker build, push and signing steps. Skip packaging and artifact uploads"
     required: false
@@ -101,7 +109,7 @@ runs:
 
     # Currently pinned to avoid numerous conflicts. See ticket: PSREDEV-3389
     - name: Install Cosign
-      uses: sigstore/cosign-installer@v3.10.1
+      uses: sigstore/cosign-installer@v4.1.1
       with:
         cosign-release: ${{ inputs.cosign-version }}
 
@@ -123,5 +131,6 @@ runs:
         COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, ' | ') }}
         GITHUB_ACTOR: ${{ github.actor }}
         VERSION_NUMBER: ${{ inputs.version-number }}
+        TLOG_UPLOAD: ${{ inputs.tlog-upload }}
       run: ${{ github.action_path }}/scripts/build-tag-push-ecr.sh
       shell: bash
