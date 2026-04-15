@@ -13,9 +13,9 @@ inputs:
     required: false
     default: "true"
   cosign-version:
-    description: "The version of cosign to use for signing. This defaults to v3.0.5 which is currently the latest stable release"
+    description: "The version of cosign to use for signing. This defaults to v3.0.6 which is currently the latest stable release"
     required: false
-    default: "v3.0.5"
+    default: "v2.5.1"
   cosign-installer:
     description: "The version of the cosign installer action to use. This defaults to v4.1.1, which is currently the latest stable release"
     required: false
