@@ -10,9 +10,8 @@ The action packages, signs, and uploads the application to the specified ECR and
 | ----- | ----------- | -------- | ------- | ------- |
 | role-to-assume-arn | The secret with the ARN of the role to assume (required) eg secrets.GH_ACTIONS_ROLE_ARN | true | | arn:aws:iam::0123456789999:role/myawesomeapppipeline-GitHubActionsRole-16HIKMTBBDL8Y |
 | container-sign-kms-key-arn | The secret with the ARN of the key to sign container images e.g. secrets.CONTAINER_SIGN_KMS_KEY | false | "none" | arn:aws:kms:eu-west-2:0123456789999:key/ab12cd34-6e5f-7gh8-i90j-05aaa12345ab |
-| tlog-upload | Upload signing record to Rekor transparency log | false | "true" | |
+| tlog-upload | Upload signing record to Rekor transparency log, only available until Cosign v2 | false | "false" | |
 | cosign-version | The version of cosign to use for signing | false | "v3.0.6" | v3.0.6 |
-| cosign-installer | The version of cosign-installer to use for installing cosign | false | "v4.1.1" | v4.1.1 |
 | build-and-push-image-only | Only run docker build, push and signing steps. Skip packaging and artifact uploads | false | "false" | |
 | template-file | The name of the CF template for the application. This defaults to template.yaml | false | template.yaml | custom-template.yaml |
 | working-directory | The working directory containing the app | false | . | ./sam-ecr-app |

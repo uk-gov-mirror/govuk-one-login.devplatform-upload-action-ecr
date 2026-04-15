@@ -9,17 +9,13 @@ inputs:
     required: false
     default: "none"
   tlog-upload:
-    description: "Upload signing record to Rekor transparency log"
+    description: "Upload signing record to Rekor transparency log, only available until Cosign v2"
     required: false
-    default: "true"
+    default: "false"
   cosign-version:
     description: "The version of cosign to use for signing. This defaults to v3.0.6 which is currently the latest stable release"
     required: false
-    default: "v2.5.1"
-  cosign-installer:
-    description: "The version of the cosign installer action to use. This defaults to v4.1.1, which is currently the latest stable release"
-    required: false
-    default: "v4.1.1"
+    default: "v3.0.6"
   build-and-push-image-only:
     description: "Only run docker build, push and signing steps. Skip packaging and artifact uploads"
     required: false
