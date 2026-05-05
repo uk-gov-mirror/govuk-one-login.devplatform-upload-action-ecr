@@ -6,6 +6,8 @@ if [ -z $DOCKER_BUILD_PATH ]; then
     DOCKER_BUILD_PATH=$WORKING_DIRECTORY
 fi
 
+: "${TLOG_UPLOAD:=true}"
+
 echo "Building image"
 
 PLATFORM_OPTION=""
@@ -36,7 +38,14 @@ if [ "$PUSH_LATEST_TAG" == "true" ]; then
 fi
 
 if [ ${CONTAINER_SIGN_KMS_KEY_ARN} != "none" ]; then
-    cosign sign --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
+
+
+    COSIGN_EXTRA_ARGS=("--yes")
+    if [ "$TLOG_UPLOAD" == "false" ]; then
+        COSIGN_EXTRA_ARGS+="--tlog-upload=${TLOG_UPLOAD}"
+    fi
+    echo "Signing image using cosign with ${COSIGN_EXTRA_ARGS[@]}"
+    cosign sign --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA" $(printf "%s" "${COSIGN_EXTRA_ARGS[@]}")
 fi
 
 if [ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]; then

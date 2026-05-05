@@ -8,6 +8,14 @@ inputs:
     description: "The secret with the ARN of the key to sign container images e.g. secrets.CONTAINER_SIGN_KMS_KEY"
     required: false
     default: "none"
+  tlog-upload:
+    description: "Upload signing record to Rekor transparency log, only available for cosign v2.x or lower"
+    required: false
+    default: "true"
+  cosign-version:
+    description: "The version of cosign to use for signing. This defaults to v3.0.6"
+    required: false
+    default: "v3.0.6"
   build-and-push-image-only:
     description: "Only run docker build, push and signing steps. Skip packaging and artifact uploads"
     required: false
@@ -96,9 +104,9 @@ runs:
         password: ${{ inputs.private-docker-login-password }}
 
     - name: Install Cosign
-      uses: sigstore/cosign-installer@main
+      uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
       with:
-        cosign-release: "v3.0.3"
+        cosign-release: ${{ inputs.cosign-version }}
 
     - name: Upload Fargates to S3
       env:
@@ -118,5 +126,6 @@ runs:
         COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, ' | ') }}
         GITHUB_ACTOR: ${{ github.actor }}
         VERSION_NUMBER: ${{ inputs.version-number }}
+        TLOG_UPLOAD: ${{ inputs.tlog-upload }}
       run: ${{ github.action_path }}/scripts/build-tag-push-ecr.sh
       shell: bash
