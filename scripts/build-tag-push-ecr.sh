@@ -78,6 +78,25 @@ if [ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]; then
         sed -i "s|GIT-SHA-PLACEHOLDER|$GITHUB_SHA|" cf-template.yaml
     fi
 
+    release_metadata=(
+        "commitsha=$GITHUB_SHA"
+        "committag=$GIT_TAG"
+        "commitmessage='$COMMIT_MSG'"
+        "mergetime=$MERGE_TIME"
+        "commitauthor='$GITHUB_ACTOR'"
+        "repository=$GITHUB_REPOSITORY"
+        "skipcanary=$SKIP_CANARY_DEPLOYMENT"
+        "closecircuitbreaker=$CLOSE_CIRCUIT_BREAKER"
+    )
+
+    [[ ${VERSION_NUMBER:-} ]] && release_metadata+=(
+        "codepipeline-artifact-revision-summary=$VERSION_NUMBER"
+        "release=$VERSION_NUMBER"
+    )
+
+    metadata=$(IFS="," ; echo "${release_metadata[*]}")
+    column -ts= < <(tr "," "\n" <<< "$metadata")
+
     zip template.zip cf-template.yaml
-    aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "repository=$GITHUB_REPOSITORY,commitsha=$GITHUB_SHA,committag=$GIT_TAG,commitmessage=$COMMIT_MSG,mergetime=$MERGE_TIME,skipcanary=$SKIP_CANARY_DEPLOYMENT,commitauthor='$GITHUB_ACTOR',release=$VERSION_NUMBER,closecircuitbreaker=$CLOSE_CIRCUIT_BREAKER"
+    aws s3 cp template.zip "s3://$ARTIFACT_BUCKET_NAME/template.zip" --metadata "$metadata"
 fi
