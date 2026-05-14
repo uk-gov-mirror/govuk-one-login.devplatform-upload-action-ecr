@@ -2,10 +2,10 @@ name: "Upload Containers to ECR, update references in CF templates"
 description: "Packages and uploads, replaces reference in (eg) template.yaml"
 inputs:
   role-to-assume-arn:
-    description: "The secret with the ARN of the role to assume (required) eg secrets.GH_ACTIONS_ROLE_ARN"
+    description: "The ARN of the role to assume. Typically, this comes from the sam-deploy-pipeline stack outputs"
     required: true
   container-sign-kms-key-arn:
-    description: "The secret with the ARN of the key to sign container images e.g. secrets.CONTAINER_SIGN_KMS_KEY"
+    description: "The ARN of the key to sign container images. Typically this comes from a container-signer stack output"
     required: false
     default: "none"
   build-and-push-image-only:
@@ -21,10 +21,10 @@ inputs:
     required: false
     default: .
   artifact-bucket-name:
-    description: "The secret with the name of the artifact S3 bucket (required) eg secrets.ARTIFACT_SOURCE_BUCKET_NAME"
-    required: true
+    description: "The name of the artifact S3 bucket. Typically, this comes from the sam-deploy-pipeline stack outputs"
+    required: false
   ecr-repo-name:
-    description: "The secret with the name of the ECR Repo (required) eg secrets.ECR_REPOSITORY"
+    description: "The name of the ECR Repo. Typically, this comes from the container-image-repository or test-image-repository stack outputs"
     required: true
   dockerfile:
     description: The Dockerfile to use for the build
