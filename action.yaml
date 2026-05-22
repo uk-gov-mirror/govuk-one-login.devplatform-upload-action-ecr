@@ -98,7 +98,7 @@ runs:
     - name: Install Cosign
       uses: sigstore/cosign-installer@main
       with:
-        cosign-release: "v3.1.0"
+        cosign-release: "v3.0.6"
 
     - name: Upload Fargates to S3
       env:
