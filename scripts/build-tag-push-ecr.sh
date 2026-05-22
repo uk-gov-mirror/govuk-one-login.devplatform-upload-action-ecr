@@ -36,7 +36,7 @@ if [ "$PUSH_LATEST_TAG" == "true" ]; then
 fi
 
 if [ ${CONTAINER_SIGN_KMS_KEY_ARN} != "none" ]; then
-    cosign sign --new-bundle-format=false --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
+    cosign sign --tlog-upload=false --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
 fi
 
 if [ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]; then
