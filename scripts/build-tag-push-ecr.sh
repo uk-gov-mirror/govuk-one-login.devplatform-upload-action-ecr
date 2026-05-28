@@ -36,7 +36,9 @@ if [ "$PUSH_LATEST_TAG" == "true" ]; then
 fi
 
 if [ ${CONTAINER_SIGN_KMS_KEY_ARN} != "none" ]; then
-    cosign sign --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
+    signing_config="/tmp/signing-config.json"
+    cosign signing-config create --with-default-services=true --no-default-rekor=true --out="$signing_config"
+    cosign sign --signing-config "$signing_config" --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
 fi
 
 if [ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]; then
