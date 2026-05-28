@@ -24,7 +24,7 @@ repos:
                      ^pyproject.toml
               )
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.13
+    rev: v1.5.5
     hooks:
       - id: remove-tabs
       - id: remove-crlf
@@ -41,7 +41,7 @@ repos:
         args: ['--verbose']
         verbose: true
   - repo: https://github.com/lovesegfault/beautysh
-    rev: 'v6.2.1'
+    rev: v6.4.3
     hooks:
       - id: beautysh
   - repo: https://github.com/codespell-project/codespell
