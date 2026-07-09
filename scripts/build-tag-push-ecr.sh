@@ -23,10 +23,17 @@ if [ "$PUSH_LATEST_TAG" == "true" ]; then
     TAG_OPTION="--tag $ECR_REGISTRY/$ECR_REPO_NAME:latest"
 fi
 
+TARGET_OPTION=""
+if [ -n "${DOCKER_TARGET}" ]; then
+    echo "Using target option as --target ${DOCKER_TARGET}"
+    TARGET_OPTION="--target ${DOCKER_TARGET}"
+fi
+
 docker build \
     --tag "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA" \
     $TAG_OPTION \
     $PLATFORM_OPTION \
+    $TARGET_OPTION \
     --file "$DOCKER_BUILD_PATH"/"$DOCKERFILE" \
     "$DOCKER_BUILD_PATH"
 

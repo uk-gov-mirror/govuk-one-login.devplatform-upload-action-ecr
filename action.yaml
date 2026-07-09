@@ -37,6 +37,10 @@ inputs:
     description: The target architecture for the image build
     required: false
     default: ""
+  docker-target:
+    description: The target stage to build in a multi-stage Dockerfile
+    required: false
+    default: ""
   checkout-repo:
     description: Checks out the repo as the first step of the action. Default "true".
     required: false
@@ -114,6 +118,7 @@ runs:
         DOCKERFILE: ${{ inputs.dockerfile }}
         DOCKER_BUILD_PATH: ${{ inputs.docker-build-path }}
         DOCKER_PLATFORM: ${{ inputs.docker-platform }}
+        DOCKER_TARGET: ${{ inputs.docker-target }}
         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, ' | ') }}
         GITHUB_ACTOR: ${{ github.actor }}
