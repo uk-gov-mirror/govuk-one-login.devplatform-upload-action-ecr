@@ -1,6 +1,11 @@
 #! /bin/bash
 
-set -eu
+set -euo pipefail
+
+if [[ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]] && [[ -z "${ARTIFACT_BUCKET_NAME:-}" ]]; then
+    echo "ERROR: No bucket name provided...Exiting"
+    exit 1
+fi
 
 if [ -z $DOCKER_BUILD_PATH ]; then
     DOCKER_BUILD_PATH=$WORKING_DIRECTORY
@@ -46,6 +51,7 @@ if [ ${CONTAINER_SIGN_KMS_KEY_ARN} != "none" ]; then
     curl -s https://raw.githubusercontent.com/sigstore/root-signing/refs/heads/main/targets/signing_config.v0.2.json | jq 'del(.rekorTlogUrls)' > /tmp/signing-config.json
     cosign sign --signing-config /tmp/signing-config.json --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
 fi
+
 
 if [ "$BUILD_AND_PUSH_IMAGE_ONLY" == "false" ]; then
     # This only gets set if there is a tag on the current commit.
